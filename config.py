@@ -2,6 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    JWT_SECRET = os.getenv('JWT_SECRET')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
 
@@ -23,6 +24,4 @@ class TestingConfig(Config):
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
-
-    'default': DevelopmentConfig
 }

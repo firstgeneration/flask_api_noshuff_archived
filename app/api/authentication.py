@@ -37,7 +37,6 @@ def get_or_create_user(spotify_id):
         db.session.add(user)
         db.session.commit()
 
-    print('new user', user.spotify_id)
     return user
 
 def generate_access_token(spotify_id, spotify_access_token_expires_in):
@@ -46,7 +45,7 @@ def generate_access_token(spotify_id, spotify_access_token_expires_in):
             'spotify_id': spotify_id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=int(spotify_access_token_expires_in)),
         },
-        os.getenv('JWT_SECRET'), 
+        os.getenv('JWT_SECRET'),
         algorithm='HS256'
     )
 
