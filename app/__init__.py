@@ -6,12 +6,10 @@ from flask_cors import CORS
 db = SQLAlchemy()
 
 def create_app(config_name):
+    config_object = config[config_name]
     app = Flask(__name__)
-    env_config_class = config[config_name]
-
-    app.config.from_object(env_config_class)
-    env_config_class.init_app(app)
-
+    app.config.from_object(config_object)
+    config_object.init_app(app)
     db.init_app(app)
 
     from .api import api as api_blueprint
