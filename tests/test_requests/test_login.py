@@ -1,26 +1,15 @@
-import unittest
+from .base import RequestTestBase
 from unittest.mock import Mock, patch
-from flask import current_app
-from app import create_app, db
+from app import db
 from app.models import User
 
-class TestLogin(unittest.TestCase):
-    def setUp(self):
-        self.app = create_app('testing')
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        db.create_all()
 
+class TestLogin(RequestTestBase):
+    def setUp(self):
+        super(TestLogin, self).setUp()
         self.user = User(spotify_id='test_spotify_id')
         db.session.add(self.user)
         db.session.commit()
-
-        self.client = self.app.test_client()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        self.app_context.pop()
 
     @patch('app.api.login.fetch_spotify_user_data')
     def test_login_existing_user(self, mock_spotify_fetch):
