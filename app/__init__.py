@@ -12,10 +12,13 @@ def create_app(config_name):
     config_object.init_app(app)
     db.init_app(app)
 
+    if config_name in ['development']:
+        CORS(app)
+
     from .api import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
-    if config_name in ['development']:
-        CORS(app)
+    from .api.resource_routes import register_resource_routes
+    register_resource_routes(app)
 
     return app

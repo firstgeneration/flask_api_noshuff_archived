@@ -3,9 +3,9 @@ from app import db
 from app.models import User, Post
 
 
-class TestUsers(RequestTestBase):
+class TestPosts(RequestTestBase):
     def setUp(self):
-        super(TestUsers, self).setUp()
+        super(TestPosts, self).setUp()
         self.headers = {
             "Content-Type": "application/vnd.api+json",
             "Accept": "application/vnd.api+json"
@@ -25,7 +25,7 @@ class TestUsers(RequestTestBase):
                     "user": {
                         "data": {
                             "type": "users",
-                            "id": str(self.user.id)
+                            "id": self.user.id
                         }
                     }
                 }
