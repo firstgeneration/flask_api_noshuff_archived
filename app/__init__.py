@@ -21,4 +21,7 @@ def create_app(config_name):
     from .api.resource_routes import register_resource_routes
     register_resource_routes(app)
 
+    from .middleware import Middleware
+    app.wsgi_app = Middleware(app.wsgi_app)
+
     return app
