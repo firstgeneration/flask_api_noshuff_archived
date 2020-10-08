@@ -9,7 +9,7 @@ class TestPosts(RequestTestBase):
         self.user = User(spotify_id='test_spotify_id')
         db.session.add(self.user)
         db.session.commit()
-        token = self.user.generate_access_token().decode('utf-8')
+        token = self.user.generate_auth_token().decode('utf-8')
         self.headers = {
             "Content-Type": "application/vnd.api+json",
             "Accept": "application/vnd.api+json",

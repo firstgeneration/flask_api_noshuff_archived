@@ -1,11 +1,11 @@
 from flask import request
 from ..models import User
-from . import api
+from . import authentication
 import jwt
 from .. import db
 from .spotify_utils import fetch_spotify_user_data
 
-@api.route('/login', methods=['GET'])
+@authentication.route('/login', methods=['GET'])
 def login():
     spotify_access_token = request.args.get('spotify_access_token', '')
     spotify_access_token_expires_in = request.args.get('spotify_access_token_expires_in', '')
@@ -19,7 +19,7 @@ def login():
         db.session.add(noshuff_user)
         db.session.commit()
 
-    noshuff_access_token = noshuff_user.generate_access_token(spotify_access_token_expires_in)
+    noshuff_access_token = noshuff_user.generate_auth_token(spotify_access_token_expires_in)
 
     return {
         'noshuff_access_token': noshuff_access_token.decode("utf-8")

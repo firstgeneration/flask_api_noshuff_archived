@@ -7,7 +7,7 @@ from flask import g
 
 class PostList(ResourceList):
     methods = ['POST', 'GET']
-    decorators = (login_required,)
+    decorators = (login_required, )
     schema = PostSchema
     data_layer = {
         'session': db.session,

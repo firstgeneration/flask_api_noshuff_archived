@@ -15,16 +15,8 @@ def create_app(config_name):
     if config_name in ['development']:
         CORS(app)
 
-    from .api import api as api_blueprint
-    app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    from .api import api, authentication as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/api/v1')
+    api.init_app(app)
 
-    from .api.resource_routes import register_resource_routes
-    register_resource_routes(app)
-
-    from .middleware import Middleware
-    app.wsgi_app = Middleware(app.wsgi_app)
-
-    if config_name not in ['testing']:
-        app.app_context().push()
-    
     return app

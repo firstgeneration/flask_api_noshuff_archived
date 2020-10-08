@@ -23,11 +23,11 @@ class User(db.Model):
         # Add in error handling
         return jwt.decode(token, current_app.config['JWT_SECRET'], algorithms='HS256')
 
-    def generate_access_token(self, spotify_access_token_expires_in=360):
+    def generate_auth_token(self, expires_in=360):
         return jwt.encode(
             {
                 'spotify_id': self.spotify_id,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=int(spotify_access_token_expires_in)),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=int(expires_in)),
             },
             current_app.config['JWT_SECRET'],
             algorithm='HS256'
