@@ -24,4 +24,7 @@ def create_app(config_name):
     from .middleware import Middleware
     app.wsgi_app = Middleware(app.wsgi_app)
 
+    if config_name not in ['testing']:
+        app.app_context().push()
+    
     return app
