@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, g, abort
+from flask import request, g, abort, make_response, jsonify
 from .models import User
 
 def authenticate_user(f):
@@ -22,6 +22,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not g.current_user:
-            abort(401, description="You must authenticate to perform this action")
+            # Improve JSON format for jsonapi spec
+            abort(make_response(jsonify(message="You must authenticate to perform this action"), 401))
         return f(*args, **kwargs)
     return decorated_function
