@@ -45,3 +45,13 @@ class TestPosts(RequestTestBase):
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(Post.query.count(), 0)
+
+    def test_get_post(self):
+        post = Post(spotify_playlist_id='test_spotify_playlist_id', user=self.user)
+        db.session.add(post)
+        db.session.commit()
+        response = self.client.get('/api/v1/posts', headers=self.headers)
+
+        self.assertEqual(response.status_code, 200)
+        post_id = response.json['data'][0]['id']
+        self.assertEqual(str(Post.query.first().id), post_id)

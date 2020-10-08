@@ -6,7 +6,7 @@ from ..decorators import login_required
 from flask import g
 
 class PostList(ResourceList):
-    methods = ['POST']
+    methods = ['POST', 'GET']
     decorators = (login_required,)
     schema = PostSchema
     data_layer = {

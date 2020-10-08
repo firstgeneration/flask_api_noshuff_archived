@@ -7,8 +7,8 @@ class Middleware():
         self.app = app
 
     def __call__(self, environ, start_response):
-        request = Request(environ)
-        auth_header = request.headers.get('Authorization')
+        r = Request(environ)
+        auth_header = r.headers.get('Authorization', None)
         if auth_header:
             auth_token = auth_header.split(" ")[1]
             if auth_token:
