@@ -7,6 +7,7 @@ class PostSchema(Schema):
 
     id = fields.Integer(as_string=True, dump_only=True)
     spotify_playlist_id = fields.Str(required=True)
+    caption = fields.Str()
     user = Relationship(
         type_='users'
     )

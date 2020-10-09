@@ -21,7 +21,8 @@ class TestPosts(RequestTestBase):
             "data": {
                 "type": "posts",
                 "attributes": {
-                    "spotify_playlist_id": "test_spotify_playlist_id"
+                    "spotify_playlist_id": "test_spotify_playlist_id",
+                    "caption": "test_caption"
                 }
             }
         }
@@ -29,7 +30,11 @@ class TestPosts(RequestTestBase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Post.query.count(), 1)
-        self.assertEqual(Post.query.first().user.spotify_id, self.user.spotify_id)
+        post = Post.query.first()
+
+        for attr, value in data["data"]["attributes"].items():
+            self.assertEqual(getattr(post, attr), value)
+        self.assertEqual(post.user.spotify_id, self.user.spotify_id)
 
     def test_post_post_wo_auth(self):
         data = {

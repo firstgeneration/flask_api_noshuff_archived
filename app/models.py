@@ -38,3 +38,4 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     spotify_playlist_id = db.Column(db.String(64))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    caption = db.Column(db.String(300))
