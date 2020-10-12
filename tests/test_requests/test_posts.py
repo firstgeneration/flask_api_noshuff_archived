@@ -57,4 +57,4 @@ class TestPosts(RequestTestBase):
         db.session.commit()
         response = self.client.get('/api/v1/posts', headers=self.headers)
 
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 200)
