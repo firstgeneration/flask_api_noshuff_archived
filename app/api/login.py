@@ -1,7 +1,6 @@
 from flask import request
 from ..models import User
 from . import authentication
-import jwt
 from .. import db
 from .spotify_utils import fetch_spotify_user_data
 
