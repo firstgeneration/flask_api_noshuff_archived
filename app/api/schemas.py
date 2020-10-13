@@ -1,6 +1,18 @@
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
+class UserSchema(Schema):
+    class Meta:
+        type_ = 'users'
+
+    id = fields.Integer(as_string=True, dump_only=True)
+    spotify_id = fields.Str()
+    posts = Relationship(
+        type_='posts',
+        many=True,
+        schema='PostSchema',
+    )
+
 class PostSchema(Schema):
     class Meta:
         type_ = 'posts'
@@ -9,5 +21,7 @@ class PostSchema(Schema):
     spotify_playlist_id = fields.Str(required=True)
     caption = fields.Str()
     user = Relationship(
-        type_='users'
+        attribute='user',
+        type_='users',
+        schema='UserSchema',
     )
