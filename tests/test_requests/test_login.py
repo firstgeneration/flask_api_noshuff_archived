@@ -1,12 +1,11 @@
 from app import db
 from app.models import User
+from ..factories import UserFactory
 
 def test_login_existing_user(client, mocker):
     mocker.patch('app.api.login.fetch_spotify_user_data', return_value={ 'id': 'test_spotify_id' })
 
-    user = User(spotify_id='test_spotify_id')
-    db.session.add(user)
-    db.session.commit()
+    user = UserFactory()
     query_string = {
         'spotify_access_token': 'test_token',
         'spotify_access_token_expires_in': '360'

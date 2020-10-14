@@ -1,11 +1,9 @@
 from app import db
-from app.models import User, Post
+from app.models import Post
+from ..factories import UserFactory, PostFactory
 
 def test_post_post(client, make_headers):
-    user = User(spotify_id='test_spotify_id')
-    db.session.add(user)
-    db.session.commit()
-
+    user = UserFactory()
     data = {
         "data": {
             "type": "posts",
@@ -25,10 +23,7 @@ def test_post_post(client, make_headers):
         assert getattr(post, attr) == value
 
 def test_post_post_wo_auth(client, make_headers):
-    user = User(spotify_id='test_spotify_id')
-    db.session.add(user)
-    db.session.commit()
-
+    user = UserFactory()
     data = {
         "data": {
             "type": "posts",
@@ -46,14 +41,8 @@ def test_post_post_wo_auth(client, make_headers):
     assert Post.query.count() == 0
 
 def test_get_posts(client, make_headers):
-    user = User(spotify_id='test_spotify_id')
-    post = Post(
-        spotify_playlist_id='test_spotify_playlist_id',
-        user=user,
-        caption='test_caption',
-    )
-    db.session.add(user, post)
-    db.session.commit()
+    post = PostFactory()
+    user = post.user
     response = client.get('/api/v1/posts?include=user', headers=make_headers(user))
 
     post_attrs = ['spotify_playlist_id', 'caption']
