@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_rest_jsonapi import Api
-from .resources import PostList
+from .resources import UserDetail, PostList
 from ..decorators import authenticate_user
 
 authentication = Blueprint('authentication', __name__)
@@ -14,4 +14,5 @@ def before_request():
     pass
 
 api = Api(blueprint=json_api)
+api.route(UserDetail, 'user_detail', '/api/v1/users/<int:id>')
 api.route(PostList, 'post_list', '/api/v1/posts')

@@ -1,9 +1,18 @@
-from flask_rest_jsonapi import ResourceList
+from flask_rest_jsonapi import ResourceList, ResourceDetail
 from app import db
-from .schemas import PostSchema
-from app.models import Post
+from .schemas import UserSchema, PostSchema
+from app.models import User, Post
 from ..decorators import login_required
 from flask import g
+
+class UserDetail(ResourceDetail):
+    methods = ['GET']
+    decorators = (login_required, )
+    schema = UserSchema
+    data_layer = {
+        'session': db.session,
+        'model': User,
+    }
 
 class PostList(ResourceList):
     methods = ['GET', 'POST']
