@@ -12,9 +12,9 @@ def login():
     spotify_user_data = fetch_spotify_user_data(spotify_access_token)
     spotify_id = spotify_user_data.get('id')
 
-    noshuff_user = User.query.filter_by(spotify_id=spotify_id).first()
+    noshuff_user = User.query.filter_by(id=spotify_id).first()
     if not noshuff_user:
-        noshuff_user = User(spotify_id=spotify_id)
+        noshuff_user = User(id=spotify_id)
         db.session.add(noshuff_user)
         db.session.commit()
 

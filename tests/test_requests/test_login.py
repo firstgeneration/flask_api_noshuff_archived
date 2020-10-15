@@ -3,9 +3,9 @@ from app.models import User
 from ..factories import UserFactory
 
 def test_login_existing_user(client, mocker):
-    mocker.patch('app.api.login.fetch_spotify_user_data', return_value={ 'id': 'test_spotify_id' })
-
     user = UserFactory()
+    mocker.patch('app.api.login.fetch_spotify_user_data', return_value={ 'id': user.id })
+
     query_string = {
         'spotify_access_token': 'test_token',
         'spotify_access_token_expires_in': '360'
@@ -16,7 +16,8 @@ def test_login_existing_user(client, mocker):
     assert User.query.count() == 1
 
 def test_login_new_user(client, mocker):
-    mocker.patch('app.api.login.fetch_spotify_user_data', return_value={ 'id': 'test_spotify_id_new' })
+    user = UserFactory.build()
+    mocker.patch('app.api.login.fetch_spotify_user_data', return_value={ 'id': user.id })
 
     query_string = {
         'spotify_access_token': 'test_token',

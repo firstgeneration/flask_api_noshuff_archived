@@ -5,8 +5,7 @@ class UserSchema(Schema):
     class Meta:
         type_ = 'users'
 
-    id = fields.Integer(as_string=True, dump_only=True)
-    spotify_id = fields.Str()
+    id = fields.Str(dump_only=True)
     posts = Relationship(
         type_='posts',
         many=True,

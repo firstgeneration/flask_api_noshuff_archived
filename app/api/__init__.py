@@ -14,5 +14,5 @@ def before_request():
     pass
 
 api = Api(blueprint=json_api)
-api.route(UserDetail, 'user_detail', '/api/v1/users/<int:id>')
+api.route(UserDetail, 'user_detail', '/api/v1/users/<id>')
 api.route(PostList, 'post_list', '/api/v1/posts')

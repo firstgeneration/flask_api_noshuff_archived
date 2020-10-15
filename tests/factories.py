@@ -7,8 +7,8 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
         sqlalchemy_session_persistence = "commit"
 
-    spotify_id = 'test_spotify_id'
-    email = 'test_email@noshuff.app'
+    id = factory.Sequence(lambda n: f'test_spotify_id{n}')
+    email = factory.Sequence(lambda n: f'test_email@noshuff.app{n}')
 
     @factory.post_generation
     def with_posts(obj, create, extracted, **kwargs):
