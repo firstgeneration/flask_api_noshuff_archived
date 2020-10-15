@@ -1,7 +1,8 @@
 from flask import request
-from ..models import User
+from app import db
+from app.models import User
 from . import authentication
-from .. import db
+
 from .spotify_utils import fetch_spotify_user_data
 
 @authentication.route('/login', methods=['GET'])

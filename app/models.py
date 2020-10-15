@@ -5,6 +5,8 @@ import datetime
 
 class User(db.Model):
     __tablename__ = 'users'
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
     id = db.Column(db.String(64), primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     posts = db.relationship('Post', backref='user', lazy=True)
@@ -34,6 +36,8 @@ class User(db.Model):
 
 class Post(db.Model):
     __tablename__ = 'posts'
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
     id = db.Column(db.Integer, primary_key=True)
     spotify_playlist_id = db.Column(db.String(64))
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
