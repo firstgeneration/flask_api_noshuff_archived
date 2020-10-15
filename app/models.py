@@ -3,6 +3,12 @@ from . import db
 import jwt
 import datetime
 
+follows = db.Table('follows',
+    db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow()),
+    db.Column('follower_id', db.String, db.ForeignKey('users.id')),
+    db.Column('followee_id', db.String, db.ForeignKey('users.id'))
+)
+
 class User(db.Model):
     __tablename__ = 'users'
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
@@ -10,6 +16,13 @@ class User(db.Model):
     id = db.Column(db.String(64), primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     posts = db.relationship('Post', backref='user', lazy=True)
+    following = db.relationship(
+        'User',
+        secondary=follows,
+        primaryjoin=follows.c.follower_id == id,
+        secondaryjoin=follows.c.followee_id == id,
+        backref='followers',
+    )
 
     @staticmethod
     def get_user_from_auth_token(token):
@@ -33,6 +46,7 @@ class User(db.Model):
             current_app.config['JWT_SECRET'],
             algorithm='HS256'
         )
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
