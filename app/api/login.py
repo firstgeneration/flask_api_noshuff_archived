@@ -35,5 +35,6 @@ def login():
     noshuff_access_token = noshuff_user.generate_auth_token(spotify_access_token_expires_in)
 
     return {
-        'noshuff_access_token': noshuff_access_token.decode("utf-8")
+        'noshuff_access_token': noshuff_access_token.decode("utf-8"),
+        'user_id': noshuff_user.id
     }

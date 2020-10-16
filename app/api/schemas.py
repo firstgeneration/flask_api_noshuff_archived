@@ -6,6 +6,7 @@ class UserSchema(Schema):
         type_ = 'users'
 
     id = fields.Str(dump_only=True)
+    display_name = fields.Str(dump_only=True)
     posts = Relationship(
         type_='posts',
         many=True,

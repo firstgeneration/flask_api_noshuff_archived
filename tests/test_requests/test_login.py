@@ -19,7 +19,9 @@ def test_login_existing_user(client, mocker):
     }
     response = client.get('/api/v1/login', query_string=query_string)
 
+    
     assert response.status_code == 200
+    assert list(response.json.keys()) == ['noshuff_access_token', 'user_id']
     assert User.query.count() == 1
 
 def test_login_existing_user_new_user_data(client, mocker):
@@ -38,6 +40,7 @@ def test_login_existing_user_new_user_data(client, mocker):
     response = client.get('/api/v1/login', query_string=query_string)
 
     assert response.status_code == 200
+    assert list(response.json.keys()) == ['noshuff_access_token', 'user_id']
     assert User.query.count() == 1
     assert User.query.first().display_name == new_display_name
     assert User.query.first().email == new_email
@@ -53,4 +56,5 @@ def test_login_new_user(client, mocker):
     response = client.get('/api/v1/login', query_string=query_string)
 
     assert response.status_code == 200
+    assert list(response.json.keys()) == ['noshuff_access_token', 'user_id']
     assert User.query.count() == 1
