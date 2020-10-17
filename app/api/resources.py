@@ -1,4 +1,4 @@
-from flask_rest_jsonapi import ResourceList, ResourceDetail
+from flask_rest_jsonapi import ResourceList, ResourceDetail, ResourceRelationship
 from app import db
 from .schemas import UserSchema, PostSchema
 from app.models import User, Post
@@ -12,6 +12,14 @@ class UserDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': User,
+    }
+
+class UserRelationship(ResourceRelationship):
+    decorators = (login_required, )
+    schema = UserSchema
+    data_layer = {
+        'session': db.session,
+        'model': User
     }
 
 class PostList(ResourceList):
