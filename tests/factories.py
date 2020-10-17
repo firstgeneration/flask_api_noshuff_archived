@@ -24,5 +24,5 @@ class PostFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = "commit"
 
     spotify_playlist_id = factory.Sequence(lambda n: f'test_spotify_playlist_id_{n+1}')
-    caption = "this is a test caption"
+    caption = factory.Sequence(lambda n: f'this is a test caption{n+1}')
     user = factory.SubFactory(UserFactory)

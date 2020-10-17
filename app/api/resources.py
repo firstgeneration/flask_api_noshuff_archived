@@ -34,3 +34,16 @@ class PostList(ResourceList):
     def create_object(self, data, kwargs):
         data['user'] = g.current_user.id
         super(PostList, self).create_object(data, kwargs)
+
+class FeedList(ResourceList):
+    def query(self, view_kwargs):
+        return g.current_user.followed_posts()
+
+    methods = ['GET']
+    decorators = (login_required, )
+    schema = PostSchema
+    data_layer = {
+        'session': db.session,
+        'model': Post,
+        'methods': {'query': query}
+    }

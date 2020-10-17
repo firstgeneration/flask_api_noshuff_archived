@@ -25,6 +25,16 @@ class User(db.Model):
         backref='followers',
     )
 
+    def followed_posts(self):
+        return Post.query.join(
+            follows,
+            follows.c.followee_id == Post.user_id
+        ).filter(
+            follows.c.follower_id == self.id
+        ).order_by(
+            Post.created_at.desc()
+        )
+
     @staticmethod
     def get_user_from_auth_token(token):
         decoded = User.decode_auth_token(token)
