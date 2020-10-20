@@ -35,6 +35,17 @@ class User(db.Model):
             Post.created_at.desc()
         )
 
+    def unfollowed_posts(self):
+        return Post.query \
+            .filter(~db.session.query(follows) \
+                .filter(follows.c.follower_id == self.id) \
+                .filter(follows.c.followee_id == Post.user_id) \
+                .exists()
+            ) \
+            .filter(Post.user_id != self.id) \
+            .order_by(Post.created_at.desc()
+        )
+
     @staticmethod
     def get_user_from_auth_token(token):
         decoded = User.decode_auth_token(token)

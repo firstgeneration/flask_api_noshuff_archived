@@ -14,6 +14,7 @@ class UserList(ResourceList):
         'model': User
     }
 
+
 class UserDetail(ResourceDetail):
     methods = ['GET']
     decorators = (login_required, )
@@ -23,6 +24,7 @@ class UserDetail(ResourceDetail):
         'model': User,
     }
 
+
 class UserRelationship(ResourceRelationship):
     decorators = (login_required, )
     schema = UserSchema
@@ -30,6 +32,7 @@ class UserRelationship(ResourceRelationship):
         'session': db.session,
         'model': User
     }
+
 
 class PostList(ResourceList):
     methods = ['GET', 'POST']
@@ -44,6 +47,7 @@ class PostList(ResourceList):
         data['user'] = g.current_user.id
         super(PostList, self).create_object(data, kwargs)
 
+
 class FeedList(ResourceList):
     def query(self, view_kwargs):
         return g.current_user.followed_posts()
@@ -57,6 +61,7 @@ class FeedList(ResourceList):
         'methods': {'query': query}
     }
 
+
 class HashtagList(ResourceList):
     methods = ['GET']
     decorators = (login_required, )
@@ -64,4 +69,18 @@ class HashtagList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': Hashtag
+    }
+
+
+class ExploreList(ResourceList):
+    def query(self, view_kwargs):
+        return g.current_user.unfollowed_posts()
+
+    methods = ['GET']
+    decorators = (login_required, )
+    schema = PostSchema
+    data_layer = {
+        'session': db.session,
+        'model': Post,
+        'methods': {'query': query}
     }
