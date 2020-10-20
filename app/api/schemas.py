@@ -33,3 +33,10 @@ class PostSchema(Schema):
         type_='users',
         schema='UserSchema',
     )
+
+class HashtagSchema(Schema):
+    class Meta:
+        type_ = 'hashtags'
+
+    id = fields.Integer(as_string=True, dump_only=True)
+    tag = fields.Str()

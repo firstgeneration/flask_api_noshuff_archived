@@ -26,3 +26,11 @@ class PostFactory(factory.alchemy.SQLAlchemyModelFactory):
     spotify_playlist_id = factory.Sequence(lambda n: f'test_spotify_playlist_id_{n+1}')
     caption = factory.Sequence(lambda n: f'this is a test caption{n+1}')
     user = factory.SubFactory(UserFactory)
+
+class HashtagFactory(factory.alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        model = models.Hashtag
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = "commit"
+
+    tag = factory.Sequence(lambda n: f'tag{n+1}')

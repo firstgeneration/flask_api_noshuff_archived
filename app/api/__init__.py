@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_rest_jsonapi import Api
-from .resources import UserDetail, UserList, PostList, UserRelationship, FeedList
+from .resources import UserDetail, UserList, PostList, UserRelationship, FeedList, HashtagList
 from ..decorators import authenticate_user
 
 authentication = Blueprint('authentication', __name__)
@@ -19,3 +19,4 @@ api.route(UserList, 'user_list', '/api/v1/users')
 api.route(PostList, 'post_list', '/api/v1/posts')
 api.route(UserRelationship, 'user_follows', '/api/v1/users/<id>/relationships/follows')
 api.route(FeedList, 'feed_list', '/api/v1/feed')
+api.route(HashtagList, 'hashtag_list', '/api/v1/hashtags')

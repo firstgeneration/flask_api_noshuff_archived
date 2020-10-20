@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceList, ResourceDetail, ResourceRelationship
 from app import db
-from .schemas import UserSchema, PostSchema
-from app.models import User, Post
+from .schemas import UserSchema, PostSchema, HashtagSchema
+from app.models import User, Post, Hashtag
 from ..decorators import login_required
 from flask import g
 
@@ -55,4 +55,13 @@ class FeedList(ResourceList):
         'session': db.session,
         'model': Post,
         'methods': {'query': query}
+    }
+
+class HashtagList(ResourceList):
+    methods = ['GET']
+    decorators = (login_required, )
+    schema = HashtagSchema
+    data_layer = {
+        'session': db.session,
+        'model': Hashtag
     }

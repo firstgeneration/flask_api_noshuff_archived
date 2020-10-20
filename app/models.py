@@ -67,3 +67,9 @@ class Post(db.Model):
     spotify_playlist_id = db.Column(db.String(64), nullable=False)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     caption = db.Column(db.String(300))
+
+class Hashtag(db.Model):
+    __tablename__ = 'hashtags'
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(64), nullable=False)
