@@ -33,3 +33,12 @@ def test_patch_user(client, make_headers):
     response = client.patch(f'/api/v1/users/{user.id}', headers=make_headers(user))
 
     assert response.status_code == 405
+
+def test_get_users(client, make_headers):
+    users = UserFactory.create_batch(2)
+
+    response = client.get(f'/api/v1/users', headers=make_headers(users[0]))
+
+    assert response.status_code == 200
+    user_data = response.json['data']
+    assert len(user_data) == 2

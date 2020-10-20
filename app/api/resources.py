@@ -5,6 +5,15 @@ from app.models import User, Post
 from ..decorators import login_required
 from flask import g
 
+class UserList(ResourceList):
+    methods = ['GET']
+    decorators = (login_required, )
+    schema = UserSchema
+    data_layer = {
+        'session': db.session,
+        'model': User
+    }
+
 class UserDetail(ResourceDetail):
     methods = ['GET']
     decorators = (login_required, )
