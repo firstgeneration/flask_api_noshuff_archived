@@ -26,25 +26,22 @@ class User(db.Model):
     )
 
     def followed_posts(self):
-        return Post.query.join(
-            follows,
-            follows.c.followee_id == Post.user_id
-        ).filter(
-            follows.c.follower_id == self.id
-        ).order_by(
-            Post.created_at.desc()
-        )
+        return Post.query \
+            .join(
+                follows,
+                follows.c.followee_id == Post.user_id) \
+            .filter(follows.c.follower_id == self.id) \
+            .order_by(Post.created_at.desc())
 
     def unfollowed_posts(self):
         return Post.query \
-            .filter(~db.session.query(follows) \
-                .filter(follows.c.follower_id == self.id) \
-                .filter(follows.c.followee_id == Post.user_id) \
-                .exists()
-            ) \
+            .outerjoin(
+                follows,
+                db.and_(follows.c.followee_id == Post.user_id, \
+                        follows.c.follower_id == self.id)) \
+            .filter(follows.c.followee_id == None) \
             .filter(Post.user_id != self.id) \
-            .order_by(Post.created_at.desc()
-        )
+            .order_by(Post.created_at.desc())
 
     @staticmethod
     def get_user_from_auth_token(token):
