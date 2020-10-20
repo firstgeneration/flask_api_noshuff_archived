@@ -35,12 +35,17 @@ class UserRelationship(ResourceRelationship):
 
 
 class PostList(ResourceList):
+    def after_create_object(self, obj, data, view_kwargs):
+        if data.get('caption', None):
+            Hashtag.save_from_string(data['caption'])
+
     methods = ['GET', 'POST']
     decorators = (login_required, )
     schema = PostSchema
     data_layer = {
         'session': db.session,
         'model': Post,
+        'methods': {'after_create_object': after_create_object}
     }
 
     def create_object(self, data, kwargs):

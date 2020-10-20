@@ -2,6 +2,7 @@ from flask import current_app
 from . import db
 import jwt
 import datetime
+import re
 
 follows = db.Table('follows',
     db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow()),
@@ -80,4 +81,13 @@ class Hashtag(db.Model):
     __tablename__ = 'hashtags'
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.String(64), nullable=False)
+    tag = db.Column(db.String(64), unique=True, nullable=False)
+
+    @staticmethod
+    def save_from_string(string):
+        regex = re.compile(r'#\w+')
+        for tag in re.findall(regex, string):
+            clean_tag = tag[1:].lower()
+            if (len(clean_tag) <= 64) and not Hashtag.query.filter_by(tag=clean_tag).first():
+                db.session.add(Hashtag(tag=clean_tag))
+                db.session.commit()
