@@ -19,4 +19,7 @@ def create_app(config_name):
     app.register_blueprint(auth_blueprint, url_prefix='/api/v1')
     api.init_app(app)
 
+    from app.api.permissions import permission_manager
+    api.permission_manager(permission_manager)
+
     return app
