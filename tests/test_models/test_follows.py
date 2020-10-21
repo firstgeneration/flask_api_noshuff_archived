@@ -1,8 +1,7 @@
-import pytest
 from app import db
 from ..factories import UserFactory
 
-def test_follow_user(client, make_headers):
+def test_follow_user(client):
     user1, user2 = UserFactory.create_batch(2)
 
     user1.following.append(user2)

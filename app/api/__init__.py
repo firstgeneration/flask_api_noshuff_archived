@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_rest_jsonapi import Api
-from .resources import UserDetail, UserList, PostList, UserRelationship, FeedList, HashtagList, ExploreList
+from . import resources
 from ..decorators import authenticate_user
 
 authentication = Blueprint('authentication', __name__)
@@ -14,10 +14,11 @@ def before_request():
     pass
 
 api = Api(blueprint=json_api)
-api.route(UserDetail, 'user_detail', '/api/v1/users/<id>')
-api.route(UserList, 'user_list', '/api/v1/users')
-api.route(PostList, 'post_list', '/api/v1/posts')
-api.route(UserRelationship, 'user_follows', '/api/v1/users/<id>/relationships/follows')
-api.route(FeedList, 'feed_list', '/api/v1/feed')
-api.route(HashtagList, 'hashtag_list', '/api/v1/hashtags')
-api.route(ExploreList, 'explore_list', '/api/v1/explore')
+api.route(resources.UserDetail, 'user_detail', '/api/v1/users/<id>')
+api.route(resources.UserList, 'user_list', '/api/v1/users')
+api.route(resources.PostList, 'post_list', '/api/v1/posts')
+api.route(resources.UserRelationship, 'user_follows', '/api/v1/users/<id>/relationships/follows')
+api.route(resources.FeedList, 'feed_list', '/api/v1/feed')
+api.route(resources.HashtagList, 'hashtag_list', '/api/v1/hashtags')
+api.route(resources.ExploreList, 'explore_list', '/api/v1/explore')
+api.route(resources.PostRelationship, 'post_likes', '/api/v1/posts/<int:id>/relationships/likes')

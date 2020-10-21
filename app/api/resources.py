@@ -53,6 +53,15 @@ class PostList(ResourceList):
         super(PostList, self).create_object(data, kwargs)
 
 
+class PostRelationship(ResourceRelationship):
+    decorators = (login_required, )
+    schema = PostSchema
+    data_layer = {
+        'session': db.session,
+        'model': Post
+    }
+
+
 class FeedList(ResourceList):
     def query(self, view_kwargs):
         return g.current_user.followed_posts()

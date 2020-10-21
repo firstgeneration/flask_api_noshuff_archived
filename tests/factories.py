@@ -27,6 +27,14 @@ class PostFactory(factory.alchemy.SQLAlchemyModelFactory):
     caption = factory.Sequence(lambda n: f'this is a test caption{n+1}')
     user = factory.SubFactory(UserFactory)
 
+    @factory.post_generation
+    def with_likers(obj, create, extracted, **kwargs):
+        if extracted:
+            users = UserFactory.create_batch(extracted)
+            for user in users:
+                obj.likers.append(user)
+            db.session.commit()
+
 class HashtagFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = models.Hashtag

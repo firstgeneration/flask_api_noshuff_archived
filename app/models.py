@@ -10,6 +10,12 @@ follows = db.Table('follows',
     db.Column('followee_id', db.String, db.ForeignKey('users.id'))
 )
 
+likes = db.Table('likes',
+    db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow()),
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+    db.Column('user_id', db.String, db.ForeignKey('users.id'))
+)
+
 class User(db.Model):
     __tablename__ = 'users'
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
@@ -76,6 +82,7 @@ class Post(db.Model):
     spotify_playlist_id = db.Column(db.String(64), nullable=False)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     caption = db.Column(db.String(300))
+    likers = db.relationship('User', secondary="likes")
 
 class Hashtag(db.Model):
     __tablename__ = 'hashtags'

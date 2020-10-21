@@ -21,6 +21,7 @@ class UserSchema(Schema):
         type_='users'
     )
 
+
 class PostSchema(Schema):
     class Meta:
         type_ = 'posts'
@@ -33,6 +34,13 @@ class PostSchema(Schema):
         type_='users',
         schema='UserSchema',
     )
+    likes = Relationship(
+        attribute='likers',
+        many=True,
+        schema='UserSchema',
+        type_='users'
+    )
+
 
 class HashtagSchema(Schema):
     class Meta:
