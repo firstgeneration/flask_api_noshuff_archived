@@ -29,6 +29,8 @@ class PostSchema(Schema):
     id = fields.Integer(as_string=True, dump_only=True)
     spotify_playlist_id = fields.Str(required=True)
     caption = fields.Str()
+    is_liked = fields.Function(lambda obj: g.current_user in obj.likers)
+    likes_count = fields.Function(lambda obj: len(obj.likers))
     user = Relationship(
         attribute='user',
         type_='users',
