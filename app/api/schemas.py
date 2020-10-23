@@ -50,3 +50,27 @@ class HashtagSchema(Schema):
 
     id = fields.Integer(as_string=True, dump_only=True)
     tag = fields.Str()
+
+
+class CommentSchema(Schema):
+    class Meta:
+        type_ = 'comments'
+
+    id = fields.Integer(as_string=True, dump_only=True)
+    text = fields.Str(required=True)
+    author = Relationship(
+        attribute='author',
+        type_='users',
+        schema='UserSchema',
+    )
+    post = Relationship(
+        required=True,
+        attribute='post',
+        schema='PostSchema',
+        type_='posts'
+    )
+    parent = Relationship(
+        attribute='parent',
+        schema='CommentSchema',
+        type_='comments'
+    )
