@@ -17,6 +17,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-cors = "*"
 flask-rest-jsonapi = "*"
+sqlalchemy-utils = "*"
 
 [requires]
 python_version = "3.8"

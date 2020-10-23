@@ -3,6 +3,7 @@ from . import db
 import jwt
 import datetime
 import re
+from sqlalchemy_utils import LtreeType, Ltree
 
 follows = db.Table('follows',
     db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow()),
@@ -31,6 +32,7 @@ class User(db.Model):
         secondaryjoin=follows.c.followee_id == id,
         backref='followers',
     )
+    comments = db.relationship('Comment', backref='author', lazy=True)
 
     def followed_posts(self):
         return Post.query \
@@ -83,6 +85,8 @@ class Post(db.Model):
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     caption = db.Column(db.String(300))
     likers = db.relationship('User', secondary="likes")
+    comments = db.relationship('Comment', backref='post', lazy=True)
+
 
 class Hashtag(db.Model):
     __tablename__ = 'hashtags'
@@ -98,3 +102,31 @@ class Hashtag(db.Model):
             if (len(clean_tag) <= 64) and not Hashtag.query.filter_by(tag=clean_tag).first():
                 db.session.add(Hashtag(tag=clean_tag))
                 db.session.commit()
+
+
+id_seq = db.Sequence('comments_id_seq')
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+    author_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    path = db.Column(LtreeType, nullable=False)
+    parent = db.relationship(
+        'Comment',
+        primaryjoin=db.remote(path) == db.foreign(db.func.subpath(path, 0, -1)),
+        backref='children',
+        sync_backref=False,
+        viewonly=True
+    )
+
+    def __init__(self, post, author, text, parent=None):
+        _id = db.engine.execute(id_seq)
+        self.id = _id
+        self.post = post
+        self.author = author
+        self.text = text
+        ltree_id = Ltree(str(_id))
+        self.path = ltree_id if parent is None else parent.path + ltree_id
+
+    __table_args__ = (db.Index('ix_comments_path', path, postgresql_using='gist'),)

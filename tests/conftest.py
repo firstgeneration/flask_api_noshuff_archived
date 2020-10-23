@@ -7,6 +7,7 @@ def client():
     test_client = flask_app.test_client()
     app_context = flask_app.app_context()
     app_context.push()
+    db.engine.execute("CREATE EXTENSION IF NOT EXISTS ltree;")
     db.create_all()
 
     yield test_client

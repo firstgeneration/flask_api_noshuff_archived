@@ -1,6 +1,6 @@
 import os
 from app import create_app, db
-from app.models import User, Post
+from app.models import User, Post, Comment
 from flask_migrate import Migrate
 import click
 import re
@@ -10,4 +10,4 @@ migrate = Migrate(app, db)
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Post=Post)
+    return dict(db=db, User=User, Post=Post, Comment=Comment)
