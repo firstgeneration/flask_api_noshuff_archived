@@ -108,6 +108,8 @@ class Hashtag(db.Model):
 id_seq = db.Sequence('comments_id_seq')
 class Comment(db.Model):
     __tablename__ = 'comments'
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
