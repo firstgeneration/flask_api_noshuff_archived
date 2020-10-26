@@ -11,23 +11,37 @@ def login():
     spotify_access_token_expires_in = request.args.get('spotify_access_token_expires_in', '')
 
     spotify_user_data = fetch_spotify_user_data(spotify_access_token)
+
     spotify_id = spotify_user_data.get('id')
-    display_name = spotify_user_data.get('display_name')
     email = spotify_user_data.get('email')
+    display_name = spotify_user_data.get('display_name')
+    try:
+        avatar_url = spotify_user_data['images'][0]['url']
+    except:
+        avatar_url = ''
 
     noshuff_user = User.query.filter_by(id=spotify_id).first()
     if not noshuff_user:
-        noshuff_user = User(id=spotify_id, display_name=display_name, email=email)
+        noshuff_user = User(
+            id=spotify_id,
+            display_name=display_name,
+            email=email,
+            avatar_url=avatar_url
+        )
         db.session.add(noshuff_user)
         db.session.commit()
     else:
         changed = False
-        if noshuff_user.display_name != display_name:
-            noshuff_user.display_name = display_name
-            changed = True
-        if noshuff_user.email != email:
-            noshuff_user.email = email
-            changed = True
+        attrs = {
+            'display_name': display_name,
+            'email': email,
+            'avatar_url': avatar_url,
+        }
+
+        for attr, val in attrs.items():
+            if getattr(noshuff_user, attr) != val:
+                setattr(noshuff_user, attr, val)
+                changed = True
         if changed:
             db.session.add(noshuff_user)
             db.session.commit()

@@ -24,6 +24,7 @@ class User(db.Model):
     id = db.Column(db.String(64), primary_key=True)
     display_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), unique=True, index=True)
+    avatar_url = db.Column(db.String(500))
     posts = db.relationship('Post', backref='user', lazy=True)
     following = db.relationship(
         'User',

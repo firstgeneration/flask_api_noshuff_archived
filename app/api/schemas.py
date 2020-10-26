@@ -8,6 +8,7 @@ class UserSchema(Schema):
 
     id = fields.Str(dump_only=True)
     display_name = fields.Str(dump_only=True)
+    avatar_url = fields.Str(dump_only=True)
     is_following = fields.Function(lambda obj: obj in g.current_user.following)
     posts = Relationship(
         type_='posts',
