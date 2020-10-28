@@ -1,5 +1,5 @@
 from flask_rest_jsonapi import ResourceList, ResourceDetail, ResourceRelationship
-from flask_rest_jsonapi.exceptions import JsonApiException, ObjectNotFound
+from flask_rest_jsonapi.exceptions import JsonApiException, ObjectNotFound, BadRequest
 from app import db
 from .schemas import UserSchema, PostSchema, HashtagSchema, CommentSchema
 from app.models import User, Post, Hashtag, Comment
@@ -128,6 +128,10 @@ class CommentList(ResourceList):
                     f'Comment: {data["parent"]} not found',
                     source={'parameter': 'parent'}
                 )
+
+            if parent.post != post:
+                raise BadRequest("child comment must share same post: ", source={'pointer': '/post'})
+
         text = data['text']
         comment = Comment(post=post, parent=parent, author=g.current_user, text=text)
 
@@ -142,3 +146,12 @@ class CommentList(ResourceList):
             raise JsonApiException("Object creation error: " + str(e), source={'pointer': '/data'})
 
         return comment
+
+class CommentDetail(ResourceDetail):
+    methods = ['GET']
+    decorators = (login_required, )
+    schema = CommentSchema
+    data_layer = {
+        'session': db.session,
+        'model': Comment,
+    }

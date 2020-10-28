@@ -1,25 +1,19 @@
-from ..factories import UserFactory, PostFactory
-from app import db
-from app.models import Comment
+from ..factories import CommentFactory
 
 def test_post_comment(client, make_headers):
-    user = UserFactory()
-    post = PostFactory()
-    parent_comment = Comment(post=post, author=user, text='this is the parent comment')
-    db.session.add(parent_comment)
-    db.session.commit()
+    parent_comment = CommentFactory(text='this is the parent comment')
 
     data = {
         "data": {
             "type": "comments",
             "attributes": {
-                "text": "This is a comment"
+                "text": "This is a child comment"
             },
             "relationships": {
                 "post": {
                     "data": {
                         "type": "posts",
-                        "id": post.id
+                        "id": parent_comment.post.id
                     }
                 },
                 "parent": {
@@ -31,6 +25,33 @@ def test_post_comment(client, make_headers):
             }
         }
     }
-    response = client.post('/api/v1/comments', json=data, headers=make_headers(user))
+    response = client.post('/api/v1/comments', json=data, headers=make_headers(parent_comment.author))
 
     assert response.status_code == 201
+
+def test_get_comments_from_post(client, make_headers):
+    comment = CommentFactory()
+
+    response = client.get(
+        '/api/v1/posts?include=comments.author',
+        headers=make_headers(comment.author)
+    )
+
+    assert response.status_code == 200
+
+def test_get_comments_from_all_posts(client, make_headers):
+    parent_comment = CommentFactory(with_children=True)
+
+    response = client.get('/api/v1/posts?include=comments.author&comments.children', headers=make_headers(parent_comment.author))
+
+    assert response.status_code == 200
+
+def test_get_child_comments_from_parent(client, make_headers):
+    parent_comment = CommentFactory(with_children=True)
+
+    response = client.get(
+        f'/api/v1/comments/{parent_comment.id}?include=children.author',
+        headers=make_headers(parent_comment.author)
+    )
+
+    assert response.status_code == 200

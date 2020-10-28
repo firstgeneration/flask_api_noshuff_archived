@@ -42,3 +42,23 @@ class HashtagFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = "commit"
 
     tag = factory.Sequence(lambda n: f'tag{n+1}')
+
+class CommentFactory(factory.alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        model = models.Comment
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = "commit"
+
+    text = factory.Sequence(lambda n: f'this is a comment{n+1}')
+    author = factory.SubFactory(UserFactory)
+    post = factory.SubFactory(PostFactory)
+
+    class Params:
+        with_parent = factory.Trait(
+            parent = factory.SubFactory('tests.factories.CommentFactory', post=factory.SelfAttribute('..post'))
+        )
+
+    @factory.post_generation
+    def with_children(obj, create, extracted, **kwargs):
+        if extracted:
+            children = CommentFactory(parent=obj, post=obj.post)

@@ -43,6 +43,12 @@ class PostSchema(Schema):
         schema='UserSchema',
         type_='users'
     )
+    comments = Relationship(
+        attribute='comments',
+        many=True,
+        schema='CommentSchema',
+        type_='comments'
+    )
 
 
 class HashtagSchema(Schema):
@@ -58,7 +64,12 @@ class CommentSchema(Schema):
         type_ = 'comments'
 
     id = fields.Integer(as_string=True, dump_only=True)
+    created_at = fields.Date(dump_only=True)
+    updated_at = fields.Date(dump_only=True)
     text = fields.Str(required=True)
+    parent_id = fields.Function(lambda obj: obj.parent.id if obj.parent else None)
+    children_count = fields.Function(lambda obj: len(obj.children))
+
     author = Relationship(
         attribute='author',
         type_='users',
@@ -74,4 +85,10 @@ class CommentSchema(Schema):
         attribute='parent',
         schema='CommentSchema',
         type_='comments'
+    )
+    children = Relationship(
+        attribute='children',
+        schema='CommentSchema',
+        type_='comments',
+        many=True
     )
