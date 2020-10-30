@@ -6,21 +6,21 @@ import re
 from sqlalchemy_utils import LtreeType, Ltree
 
 follows = db.Table('follows',
-    db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow()),
+    db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow),
     db.Column('follower_id', db.String, db.ForeignKey('users.id')),
     db.Column('followee_id', db.String, db.ForeignKey('users.id'))
 )
 
 likes = db.Table('likes',
-    db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow()),
+    db.Column('created_at', db.DateTime, default=datetime.datetime.utcnow),
     db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
     db.Column('user_id', db.String, db.ForeignKey('users.id'))
 )
 
 class User(db.Model):
     __tablename__ = 'users'
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     id = db.Column(db.String(64), primary_key=True)
     display_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), unique=True, index=True)
@@ -79,8 +79,8 @@ class User(db.Model):
 
 class Post(db.Model):
     __tablename__ = 'posts'
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     id = db.Column(db.Integer, primary_key=True)
     spotify_playlist_id = db.Column(db.String(64), nullable=False)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
@@ -91,7 +91,7 @@ class Post(db.Model):
 
 class Hashtag(db.Model):
     __tablename__ = 'hashtags'
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     id = db.Column(db.Integer, primary_key=True)
     tag = db.Column(db.String(64), unique=True, nullable=False)
 
@@ -108,8 +108,8 @@ class Hashtag(db.Model):
 id_seq = db.Sequence('comments_id_seq')
 class Comment(db.Model):
     __tablename__ = 'comments'
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)

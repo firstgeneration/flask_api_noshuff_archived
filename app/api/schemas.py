@@ -64,8 +64,8 @@ class CommentSchema(Schema):
         type_ = 'comments'
 
     id = fields.Integer(as_string=True, dump_only=True)
-    created_at = fields.Date(dump_only=True)
-    updated_at = fields.Date(dump_only=True)
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True)
     text = fields.Str(required=True)
     parent_id = fields.Function(lambda obj: obj.parent.id if obj.parent else None)
     children_count = fields.Function(lambda obj: len(obj.children))
