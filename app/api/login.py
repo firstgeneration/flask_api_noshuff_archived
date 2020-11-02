@@ -50,5 +50,7 @@ def login():
 
     return {
         'noshuff_access_token': noshuff_access_token.decode("utf-8"),
-        'user_id': noshuff_user.id
+        'user_id': noshuff_user.id,
+        'display_name': noshuff_user.display_name,
+        'avatar_url': noshuff_user.avatar_url,
     }

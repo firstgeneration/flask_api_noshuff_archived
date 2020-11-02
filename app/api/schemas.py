@@ -28,6 +28,8 @@ class PostSchema(Schema):
         type_ = 'posts'
 
     id = fields.Integer(as_string=True, dump_only=True)
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True)
     spotify_playlist_id = fields.Str(required=True)
     caption = fields.Str()
     is_liked = fields.Function(lambda obj: g.current_user in obj.likers)
